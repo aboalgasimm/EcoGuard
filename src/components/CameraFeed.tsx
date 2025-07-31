@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Camera, CameraOff, Volume2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { AIDetection } from './AIDetection';
 
 interface Detection {
   id: string;
@@ -70,37 +71,39 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
     };
   }, [isMonitoring, toast]);
 
-  // Simulate animal detection (in real app, this would use AI model)
+  const handleDetection = (detection: Detection) => {
+    setLastDetection(detection);
+    onDetection(detection);
+    playAlertSound();
+    
+    // Clear detection indicator after 3 seconds
+    setTimeout(() => setLastDetection(null), 3000);
+    
+    toast({
+      title: "Animal Detected!",
+      description: `${detection.animalType} detected with ${(detection.confidence * 100).toFixed(1)}% confidence`,
+      variant: "destructive",
+    });
+  };
+
+  // Fallback simulation for demo purposes
   useEffect(() => {
     if (!isMonitoring || !isStreamActive) return;
 
-    const detectAnimals = () => {
-      // Simulate random detection for demo
-      if (Math.random() > 0.95) { // 5% chance per check
+    const interval = setInterval(() => {
+      if (Math.random() > 0.98) { // 2% chance per check for demo
         const detection: Detection = {
-          id: `detection-${Date.now()}`,
+          id: `demo-${Date.now()}`,
           timestamp: new Date(),
           confidence: 0.85 + Math.random() * 0.15,
           animalType: ['deer', 'rabbit', 'bird', 'fox'][Math.floor(Math.random() * 4)],
-          boundingBox: {
-            x: Math.random() * 200,
-            y: Math.random() * 200,
-            width: 50 + Math.random() * 100,
-            height: 50 + Math.random() * 100,
-          }
         };
-        
-        setLastDetection(detection);
-        onDetection(detection);
-        
-        // Play alert sound
-        playAlertSound();
+        handleDetection(detection);
       }
-    };
-
-    const interval = setInterval(detectAnimals, 1000);
+    }, 2000);
+    
     return () => clearInterval(interval);
-  }, [isMonitoring, isStreamActive, onDetection]);
+  }, [isMonitoring, isStreamActive]);
 
   const playAlertSound = () => {
     // Create audio context for alert sound
@@ -157,6 +160,13 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
           <canvas
             ref={canvasRef}
             className="absolute inset-0 w-full h-full pointer-events-none"
+          />
+          
+          <AIDetection
+            videoRef={videoRef}
+            canvasRef={canvasRef}
+            isActive={isMonitoring && isStreamActive}
+            onDetection={handleDetection}
           />
           
           {lastDetection && (

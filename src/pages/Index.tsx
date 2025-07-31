@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { CameraFeed } from '@/components/CameraFeed';
+import { CameraGrid } from '@/components/CameraGrid';
 import { DetectionHistory } from '@/components/DetectionHistory';
 import { AlertPanel } from '@/components/AlertPanel';
 import { FarmStats } from '@/components/FarmStats';
-import { Tractor, Shield, Camera } from 'lucide-react';
+import { IoTDevicePanel } from '@/components/IoTDevicePanel';
+import { AdvancedAnalytics } from '@/components/AdvancedAnalytics';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tractor, Shield, Camera, BarChart3, Zap } from 'lucide-react';
 
 interface Detection {
   id: string;
@@ -73,26 +76,64 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Camera Feed */}
-        <CameraFeed
-          onDetection={handleNewDetection}
-          isMonitoring={isMonitoring}
-          onToggleMonitoring={() => setIsMonitoring(!isMonitoring)}
-        />
+        {/* Main Dashboard */}
+        <Tabs defaultValue="monitoring" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="monitoring" className="flex items-center gap-2">
+              <Camera className="h-4 w-4" />
+              Monitoring
+            </TabsTrigger>
+            <TabsTrigger value="devices" className="flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              Devices
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="history" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              History
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <DetectionHistory detections={detections} />
-            <FarmStats detections={detections} />
-          </div>
-          <div>
-            <AlertPanel
-              latestDetection={latestDetection}
-              totalDetections={detections.length}
-            />
-          </div>
-        </div>
+          <TabsContent value="monitoring" className="space-y-6">
+            <CameraGrid onDetection={handleNewDetection} />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <FarmStats detections={detections} />
+              </div>
+              <div>
+                <AlertPanel
+                  latestDetection={latestDetection}
+                  totalDetections={detections.length}
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="devices" className="space-y-6">
+            <IoTDevicePanel />
+          </TabsContent>
+
+          <TabsContent value="analytics" className="space-y-6">
+            <AdvancedAnalytics detections={detections} />
+          </TabsContent>
+
+          <TabsContent value="history" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <DetectionHistory detections={detections} />
+              </div>
+              <div>
+                <AlertPanel
+                  latestDetection={latestDetection}
+                  totalDetections={detections.length}
+                />
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Footer */}
