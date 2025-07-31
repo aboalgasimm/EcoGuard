@@ -52,6 +52,19 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Farm-specific colors
+				farm: {
+					green: 'hsl(var(--farm-green))',
+					brown: 'hsl(var(--farm-brown))',
+					earth: 'hsl(var(--earth-tone))',
+				},
+				alert: {
+					red: 'hsl(var(--alert-red))',
+					orange: 'hsl(var(--warning-orange))',
+				},
+				detection: {
+					pulse: 'hsl(var(--detection-pulse))',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +97,40 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'detection-pulse': {
+					'0%, 100%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					},
+					'50%': {
+						transform: 'scale(1.05)',
+						opacity: '0.8'
+					}
+				},
+				'alert-flash': {
+					'0%, 100%': {
+						backgroundColor: 'hsl(var(--alert-red))',
+					},
+					'50%': {
+						backgroundColor: 'hsl(var(--warning-orange))',
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'detection-pulse': 'detection-pulse var(--pulse-detection)',
+				'alert-flash': 'alert-flash 1s ease-in-out infinite'
+			},
+			backgroundImage: {
+				'gradient-earth': 'var(--gradient-earth)',
+				'gradient-alert': 'var(--gradient-alert)',
+				'gradient-success': 'var(--gradient-success)',
+			},
+			boxShadow: {
+				'farm': 'var(--shadow-farm)',
+				'alert': 'var(--shadow-alert)',
 			}
 		}
 	},
