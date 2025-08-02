@@ -37,8 +37,8 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
   const [cameras, setCameras] = useState<CameraDevice[]>([
     {
       id: 'cam-001',
-      name: 'North Field Camera',
-      location: 'Field A - North Entrance',
+      name: 'كاميرا الحقل الشمالي',
+      location: 'الحقل أ - المدخل الشمالي',
       isOnline: true,
       batteryLevel: 85,
       isMonitoring: false,
@@ -46,16 +46,16 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
     },
     {
       id: 'cam-002',
-      name: 'South Gate Camera',
-      location: 'Field B - South Gate',
+      name: 'كاميرا البوابة الجنوبية',
+      location: 'الحقل ب - البوابة الجنوبية',
       isOnline: true,
       batteryLevel: 62,
       isMonitoring: false
     },
     {
       id: 'cam-003',
-      name: 'Water Source Camera',
-      location: 'Near Water Tank',
+      name: 'كاميرا مصدر المياه',
+      location: 'بالقرب من خزان المياه',
       isOnline: false,
       batteryLevel: 15,
       isMonitoring: false,
@@ -74,8 +74,8 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
     
     const camera = cameras.find(cam => cam.id === cameraId);
     toast({
-      title: camera?.isMonitoring ? "Monitoring Stopped" : "Monitoring Started",
-      description: `${camera?.name} is now ${camera?.isMonitoring ? 'inactive' : 'actively monitoring'}`,
+      title: camera?.isMonitoring ? "تم إيقاف المراقبة" : "تم بدء المراقبة",
+      description: `${camera?.name} ${camera?.isMonitoring ? 'غير نشطة الآن' : 'تراقب بنشاط الآن'}`,
     });
   };
 
@@ -90,8 +90,8 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
     };
     setCameras(prev => [...prev, newCamera]);
     toast({
-      title: "Camera Added",
-      description: `${newCamera.name} has been added to your network`,
+      title: "تم إضافة الكاميرا",
+      description: `تم إضافة ${newCamera.name} إلى الشبكة`,
     });
   };
 
@@ -114,11 +114,11 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5" />
-            Camera Network ({cameras.length} devices)
+            شبكة الكاميرات ({cameras.length} جهاز)
           </CardTitle>
           <Button onClick={addNewCamera} variant="outline" size="sm">
             <Plus className="h-4 w-4 mr-2" />
-            Add Camera
+            إضافة كاميرا
           </Button>
         </CardHeader>
         <CardContent>
@@ -141,7 +141,7 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
                       </p>
                     </div>
                     <Badge variant={getStatusColor(camera)} className="text-xs">
-                      {camera.isOnline ? (camera.isMonitoring ? 'Active' : 'Online') : 'Offline'}
+                      {camera.isOnline ? (camera.isMonitoring ? 'نشط' : 'متصل') : 'غير متصل'}
                     </Badge>
                   </div>
                   
@@ -164,7 +164,7 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
                   
                   {camera.lastDetection && (
                     <p className="text-xs text-muted-foreground mt-2">
-                      Last detection: {camera.lastDetection.toLocaleTimeString()}
+                      آخر اكتشاف: {camera.lastDetection.toLocaleTimeString('ar-SA')}
                     </p>
                   )}
                   
@@ -178,7 +178,7 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
                     }}
                     disabled={!camera.isOnline}
                   >
-                    {camera.isMonitoring ? 'Stop' : 'Start'} Monitoring
+                    {camera.isMonitoring ? 'إيقاف' : 'بدء'} المراقبة
                   </Button>
                 </CardContent>
               </Card>
@@ -191,7 +191,7 @@ export const CameraGrid = ({ onDetection }: CameraGridProps) => {
       {selectedCamera && (
         <div>
           <h3 className="text-lg font-semibold mb-4">
-            Active Camera: {cameras.find(cam => cam.id === selectedCamera)?.name}
+            الكاميرا النشطة: {cameras.find(cam => cam.id === selectedCamera)?.name}
           </h3>
           <CameraFeed
             onDetection={onDetection}

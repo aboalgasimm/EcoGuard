@@ -56,7 +56,7 @@ export const FarmStats = ({ detections }: FarmStatsProps) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-primary">
             <Activity className="h-5 w-5" />
-            Hourly Activity
+            النشاط الساعي
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -82,7 +82,7 @@ export const FarmStats = ({ detections }: FarmStatsProps) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-primary">
             <TrendingUp className="h-5 w-5" />
-            Animal Distribution
+            توزيع الحيوانات
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -106,7 +106,7 @@ export const FarmStats = ({ detections }: FarmStatsProps) => {
             </ResponsiveContainer>
           ) : (
             <div className="h-48 flex items-center justify-center text-muted-foreground">
-              No data to display
+              لا توجد بيانات للعرض
             </div>
           )}
         </CardContent>
@@ -116,7 +116,7 @@ export const FarmStats = ({ detections }: FarmStatsProps) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-primary">
             <Shield className="h-5 w-5" />
-            System Performance
+            أداء النظام
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -126,7 +126,7 @@ export const FarmStats = ({ detections }: FarmStatsProps) => {
                 {Math.round(averageConfidence * 100)}%
               </div>
               <div className="text-sm text-muted-foreground">
-                Avg. Confidence
+                متوسط الثقة
               </div>
             </div>
             <div className="text-center p-4 bg-gradient-earth rounded-lg">
@@ -134,7 +134,7 @@ export const FarmStats = ({ detections }: FarmStatsProps) => {
                 {detections.length}
               </div>
               <div className="text-sm text-muted-foreground">
-                Total Detections
+                إجمالي الاكتشافات
               </div>
             </div>
             <div className="text-center p-4 bg-gradient-earth rounded-lg">
@@ -142,7 +142,7 @@ export const FarmStats = ({ detections }: FarmStatsProps) => {
                 {Object.keys(animalCounts).length}
               </div>
               <div className="text-sm text-muted-foreground">
-                Species Detected
+                الأنواع المكتشفة
               </div>
             </div>
           </div>

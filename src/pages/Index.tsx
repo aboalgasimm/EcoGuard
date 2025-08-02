@@ -32,28 +32,54 @@ const Index = () => {
   const latestDetection = detections[0] || null;
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-gradient-success text-primary-foreground shadow-farm">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary-foreground/20 rounded-lg">
-              <Tractor className="h-8 w-8" />
+    <div className="min-h-screen bg-background" dir="rtl">
+      
+      <header className="bg-gradient-success text-primary-foreground shadow-farm" dir="rtl" style={{textAlign: 'right', direction: 'rtl'}}>
+        <div className="container mx-auto px-4 py-6" style={{textAlign: 'right'}}>
+          <div className="flex items-center gap-3" style={{justifyContent: 'flex-end', flexDirection: 'row-reverse'}}>
+            <div className="flex items-center gap-2">
+              {/* Logo Image */}
+              <img 
+                src="/logo.jpg" 
+                alt="EcoGuard Logo" 
+                className="h-10 w-10 rounded-lg object-contain bg-white/10 p-1"
+                onError={(e) => {
+                  // Fallback to Tractor icon if logo image fails to load
+                  e.currentTarget.style.display = 'none';
+                  const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                  if (fallback) fallback.style.display = 'block';
+                }}
+              />
+              {/* Fallback Tractor Icon */}
+              <div className="p-2 bg-primary-foreground/20 rounded-lg" style={{display: 'none'}}>
+                <Tractor className="h-8 w-8" />
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold">Farm Guardian</h1>
-              <p className="text-primary-foreground/80">AI-Powered Animal Detection System</p>
+            <div style={{textAlign: 'right'}}>
+              <h1 className="text-2xl font-bold" style={{textAlign: 'right'}}>الحارس البيئي | EcoGuard</h1>
+              <p className="text-primary-foreground/80" style={{textAlign: 'right'}}>نظام كشف الحيوانات بالذكاء الاصطناعي</p>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
+   
       <main className="container mx-auto px-4 py-6 space-y-6">
-        {/* Status Banner */}
-        <div className="bg-gradient-earth rounded-lg p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        
+        <div className="bg-gradient-earth rounded-lg p-4" dir="rtl" style={{textAlign: 'right', direction: 'rtl'}}>
+          <div style={{textAlign: 'right'}}>
+            <div className="flex items-center gap-3" style={{justifyContent: 'flex-end', flexDirection: 'row-reverse'}}>
+              <div style={{textAlign: 'right'}}>
+                <h2 className="font-semibold text-foreground" style={{textAlign: 'right'}}>
+                  حالة النظام: {isMonitoring ? 'مراقبة نشطة' : 'في الانتظار'}
+                </h2>
+                <p className="text-sm text-muted-foreground" style={{textAlign: 'right'}}>
+                  {isMonitoring 
+                    ? 'الذكاء الاصطناعي يقوم بمسح نشط للحيوانات في ممتلكاتك'
+                    : 'انقر على "بدء المراقبة" لبدء كشف الحيوانات'
+                  }
+                </p>
+              </div>
               <div className="p-2 bg-farm-green/20 rounded-lg">
                 {isMonitoring ? (
                   <Camera className="h-6 w-6 text-farm-green" />
@@ -61,39 +87,28 @@ const Index = () => {
                   <Shield className="h-6 w-6 text-muted-foreground" />
                 )}
               </div>
-              <div>
-                <h2 className="font-semibold text-foreground">
-                  System Status: {isMonitoring ? 'Active Monitoring' : 'Standby'}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  {isMonitoring 
-                    ? 'AI is actively scanning for animals on your property'
-                    : 'Click "Start Monitoring" to begin animal detection'
-                  }
-                </p>
-              </div>
             </div>
           </div>
         </div>
 
         {/* Main Dashboard */}
-        <Tabs defaultValue="monitoring" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="monitoring" className="flex items-center gap-2">
+        <Tabs defaultValue="monitoring" className="space-y-6" dir="rtl">
+          <TabsList className="grid w-full grid-cols-4" style={{direction: 'rtl'}}>
+            <TabsTrigger value="monitoring" className="flex items-center gap-2" style={{flexDirection: 'row-reverse'}}>
               <Camera className="h-4 w-4" />
-              Monitoring
+              المراقبة
             </TabsTrigger>
-            <TabsTrigger value="devices" className="flex items-center gap-2">
+            <TabsTrigger value="devices" className="flex items-center gap-2" style={{flexDirection: 'row-reverse'}}>
               <Zap className="h-4 w-4" />
-              Devices
+              الأجهزة
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <TabsTrigger value="analytics" className="flex items-center gap-2" style={{flexDirection: 'row-reverse'}}>
               <BarChart3 className="h-4 w-4" />
-              Analytics
+              التحليلات
             </TabsTrigger>
-            <TabsTrigger value="history" className="flex items-center gap-2">
+            <TabsTrigger value="history" className="flex items-center gap-2" style={{flexDirection: 'row-reverse'}}>
               <Shield className="h-4 w-4" />
-              History
+              السجل
             </TabsTrigger>
           </TabsList>
 
@@ -137,8 +152,12 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-muted text-center py-4 text-sm text-muted-foreground">
-        <p>Farm Guardian © 2024 - Protecting your harvest with AI</p>
+      <footer className="bg-muted py-4 text-sm text-muted-foreground" dir="rtl">
+        <div className="container mx-auto px-4">
+          <p className="text-center" style={{textAlign: 'center'}}>
+            الحارس البيئي | EcoGuard © 2024 - حماية محصولك بالذكاء الاصطناعي
+          </p>
+        </div>
       </footer>
     </div>
   );

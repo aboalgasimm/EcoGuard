@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Camera, CameraOff, Volume2 } from 'lucide-react';
@@ -29,6 +29,8 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isStreamActive, setIsStreamActive] = useState(false);
   const [lastDetection, setLastDetection] = useState<Detection | null>(null);
+  const [availableCameras, setAvailableCameras] = useState<MediaDeviceInfo[]>([]);
+  const [selectedCamera, setSelectedCamera] = useState<string>('');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -36,13 +38,47 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
 
     const startCamera = async () => {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
+        // Get available video devices first
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+        setAvailableCameras(videoDevices);
+
+        // Define video constraints with webcam preference
+        const constraints: MediaStreamConstraints = {
           video: {
-            facingMode: 'environment', // Use back camera on mobile
             width: { ideal: 1280 },
-            height: { ideal: 720 }
+            height: { ideal: 720 },
+            frameRate: { ideal: 30 }
           }
-        });
+        };
+
+        // If a specific camera is selected, use it
+        if (selectedCamera) {
+          (constraints.video as MediaTrackConstraints).deviceId = { exact: selectedCamera };
+        } else {
+          // Auto-select webcam by looking for desktop camera indicators
+          const webcam = videoDevices.find(device => {
+            const label = device.label.toLowerCase();
+            return (
+              label.includes('webcam') ||
+              label.includes('usb') ||
+              label.includes('integrated') ||
+              label.includes('built-in') ||
+              (!label.includes('front') && 
+               !label.includes('back') && 
+               !label.includes('selfie') &&
+               !label.includes('facetime'))
+            );
+          });
+
+          if (webcam) {
+            (constraints.video as MediaTrackConstraints).deviceId = { exact: webcam.deviceId };
+            setSelectedCamera(webcam.deviceId);
+          }
+          // If no webcam found, don't set facingMode to avoid mobile camera preference
+        }
+
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
 
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -50,11 +86,21 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
         }
       } catch (error) {
         console.error('Error accessing camera:', error);
-        toast({
-          variant: 'destructive',
-          title: 'Camera Error',
-          description: 'Unable to access camera. Please check permissions.',
-        });
+        
+        // Fallback: try basic video request without constraints
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            setIsStreamActive(true);
+          }
+        } catch (fallbackError) {
+          toast({
+            variant: 'destructive',
+            title: 'خطأ في الكاميرا',
+            description: 'غير قادر على الوصول للكاميرا. يرجى التحقق من الأذونات.',
+          });
+        }
       }
     };
 
@@ -69,9 +115,28 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
         stream.getTracks().forEach(track => track.stop());
       }
     };
-  }, [isMonitoring, toast]);
+  }, [isMonitoring, selectedCamera, toast]);
 
-  const handleDetection = (detection: Detection) => {
+  const playAlertSound = () => {
+    // Create audio context for alert sound
+    const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(400, audioContext.currentTime + 0.5);
+    
+    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+    
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 1);
+  };
+
+  const handleDetection = useCallback((detection: Detection) => {
     setLastDetection(detection);
     onDetection(detection);
     playAlertSound();
@@ -80,11 +145,11 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
     setTimeout(() => setLastDetection(null), 3000);
     
     toast({
-      title: "Animal Detected!",
-      description: `${detection.animalType} detected with ${(detection.confidence * 100).toFixed(1)}% confidence`,
+      title: "تم اكتشاف حيوان!",
+      description: `تم اكتشاف ${detection.animalType} بنسبة ثقة ${(detection.confidence * 100).toFixed(1)}%`,
       variant: "destructive",
     });
-  };
+  }, [onDetection, toast]);
 
   // Fallback simulation for demo purposes
   useEffect(() => {
@@ -103,33 +168,29 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
     }, 2000);
     
     return () => clearInterval(interval);
-  }, [isMonitoring, isStreamActive]);
-
-  const playAlertSound = () => {
-    // Create audio context for alert sound
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.setValueAtTime(400, audioContext.currentTime + 0.5);
-    
-    gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
-    
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 1);
-  };
+  }, [isMonitoring, isStreamActive, handleDetection]);
 
   return (
     <Card className="shadow-farm">
       <CardContent className="p-4 space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-primary">Live Camera Feed</h3>
+          <h3 className="text-lg font-semibold text-primary">تغذية الكاميرا المباشرة</h3>
           <div className="flex gap-2">
+            {availableCameras.length > 1 && (
+              <select
+                value={selectedCamera}
+                onChange={(e) => setSelectedCamera(e.target.value)}
+                className="px-3 py-1 text-sm border rounded-md bg-background"
+                style={{ minWidth: '150px' }}
+              >
+                <option value="">اختيار تلقائي (ويب كام)</option>
+                {availableCameras.map((camera, index) => (
+                  <option key={camera.deviceId} value={camera.deviceId}>
+                    {camera.label || `كاميرا ${index + 1}`}
+                  </option>
+                ))}
+              </select>
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -144,7 +205,7 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
               className="flex items-center gap-2"
             >
               {isMonitoring ? <CameraOff className="h-4 w-4" /> : <Camera className="h-4 w-4" />}
-              {isMonitoring ? 'Stop' : 'Start'} Monitoring
+              {isMonitoring ? 'إيقاف' : 'بدء'} المراقبة
             </Button>
           </div>
         </div>
@@ -171,7 +232,7 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
           
           {lastDetection && (
             <div className="absolute top-2 right-2 bg-alert-red text-white px-3 py-1 rounded-lg text-sm font-medium animate-alert-flash">
-              {lastDetection.animalType.toUpperCase()} DETECTED!
+              {lastDetection.animalType.toUpperCase()} تم الاكتشاف!
             </div>
           )}
           
@@ -180,7 +241,7 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
               <div className="text-center">
                 <Camera className="h-12 w-12 mx-auto mb-2 text-muted-foreground" />
                 <p className="text-sm text-muted-foreground">
-                  {isMonitoring ? 'Starting camera...' : 'Camera off'}
+                  {isMonitoring ? 'بدء تشغيل الكاميرا...' : 'الكاميرا مطفأة'}
                 </p>
               </div>
             </div>
@@ -191,10 +252,10 @@ export const CameraFeed = ({ onDetection, isMonitoring, onToggleMonitoring }: Ca
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-farm-green rounded-full animate-detection-pulse"></div>
-              <span className="text-muted-foreground">Monitoring active</span>
+              <span className="text-muted-foreground">المراقبة نشطة</span>
             </div>
             <span className="text-muted-foreground">
-              Resolution: 1280x720
+              الدقة: 1280x720
             </span>
           </div>
         )}

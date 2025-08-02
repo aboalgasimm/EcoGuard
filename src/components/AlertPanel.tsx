@@ -22,8 +22,8 @@ export const AlertPanel = ({ latestDetection, totalDetections }: AlertPanelProps
 
   const sendNotification = () => {
     if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('Farm Alert!', {
-        body: `${latestDetection?.animalType} detected on your property`,
+      new Notification('تنبيه المزرعة!', {
+        body: `تم اكتشاف ${latestDetection?.animalType} في ممتلكاتك`,
         icon: '/favicon.ico',
       });
     }
@@ -40,24 +40,24 @@ export const AlertPanel = ({ latestDetection, totalDetections }: AlertPanelProps
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-primary">
           <Bell className="h-5 w-5" />
-          Alert System
+          نظام التنبيهات
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {latestDetection && (
           <div className="p-4 bg-gradient-alert rounded-lg border-2 border-alert-red">
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-semibold text-white">ACTIVE ALERT</h4>
-              <Badge variant="destructive" className="animate-detection-pulse">
-                LIVE
+            <div className="flex items-center justify-end mb-2" style={{flexDirection: 'row-reverse'}}>
+              <h4 className="font-semibold text-white" style={{textAlign: 'right'}}>تنبيه نشط</h4>
+              <Badge variant="destructive" className="animate-detection-pulse" style={{marginLeft: '0.5rem'}}>
+                مباشر
               </Badge>
             </div>
             <p className="text-white text-sm">
-              <span className="font-medium capitalize">{latestDetection.animalType}</span> detected at{' '}
+              تم اكتشاف <span className="font-medium capitalize">{latestDetection.animalType}</span> في{' '}
               {latestDetection.timestamp.toLocaleTimeString()}
             </p>
             <p className="text-white/80 text-xs mt-1">
-              Confidence: {Math.round(latestDetection.confidence * 100)}%
+              مستوى الثقة: {Math.round(latestDetection.confidence * 100)}%
             </p>
           </div>
         )}
@@ -68,7 +68,7 @@ export const AlertPanel = ({ latestDetection, totalDetections }: AlertPanelProps
               {totalDetections}
             </div>
             <div className="text-xs text-muted-foreground">
-              Total Detections
+              إجمالي الاكتشافات
             </div>
           </div>
           <div className="text-center p-3 bg-muted rounded-lg">
@@ -76,16 +76,16 @@ export const AlertPanel = ({ latestDetection, totalDetections }: AlertPanelProps
               {latestDetection ? '1' : '0'}
             </div>
             <div className="text-xs text-muted-foreground">
-              Active Alerts
+              التنبيهات النشطة
             </div>
           </div>
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-end" style={{flexDirection: 'row-reverse'}}>
             <div className="flex items-center gap-2">
               <Smartphone className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">Push Notifications</span>
+              <span className="text-sm">الإشعارات الفورية</span>
             </div>
             <Button
               variant="outline"
@@ -102,10 +102,10 @@ export const AlertPanel = ({ latestDetection, totalDetections }: AlertPanelProps
             </Button>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-end" style={{flexDirection: 'row-reverse'}}>
             <div className="flex items-center gap-2">
               <Volume2 className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">Alert Sounds</span>
+              <span className="text-sm">أصوات التنبيه</span>
             </div>
             <Button
               variant="outline"
@@ -113,7 +113,7 @@ export const AlertPanel = ({ latestDetection, totalDetections }: AlertPanelProps
               onClick={() => setSoundEnabled(!soundEnabled)}
               className={soundEnabled ? 'bg-farm-green text-primary-foreground' : ''}
             >
-              {soundEnabled ? 'ON' : 'OFF'}
+              {soundEnabled ? 'مفعل' : 'مطفأ'}
             </Button>
           </div>
         </div>
@@ -123,7 +123,7 @@ export const AlertPanel = ({ latestDetection, totalDetections }: AlertPanelProps
             onClick={sendNotification}
             className="w-full bg-gradient-success text-primary-foreground"
           >
-            Send Manual Alert
+            إرسال تنبيه يدوي
           </Button>
         )}
       </CardContent>

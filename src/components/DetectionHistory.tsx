@@ -22,7 +22,7 @@ interface DetectionHistoryProps {
 
 export const DetectionHistory = ({ detections }: DetectionHistoryProps) => {
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
+    return date.toLocaleTimeString('ar-SA', { 
       hour: '2-digit', 
       minute: '2-digit',
       second: '2-digit'
@@ -51,15 +51,15 @@ export const DetectionHistory = ({ detections }: DetectionHistoryProps) => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-primary">
           <AlertTriangle className="h-5 w-5" />
-          Recent Detections
+          الاكتشافات الأخيرة
         </CardTitle>
       </CardHeader>
       <CardContent>
         {detections.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <div className="text-4xl mb-2">🏞️</div>
-            <p>No animals detected yet</p>
-            <p className="text-sm">Your farm is secure</p>
+            <p>لم يتم اكتشاف أي حيوانات بعد</p>
+            <p className="text-sm">مزرعتك آمنة</p>
           </div>
         ) : (
           <ScrollArea className="h-80">

@@ -30,7 +30,7 @@ export const IoTDevicePanel = () => {
   const [devices, setDevices] = useState<IoTDevice[]>([
     {
       id: 'speaker-001',
-      name: 'Ultrasonic Speaker',
+      name: 'مكبر صوت فوق صوتي',
       type: 'speaker',
       isOnline: true,
       isActive: false,
@@ -39,7 +39,7 @@ export const IoTDevicePanel = () => {
     },
     {
       id: 'lights-001',
-      name: 'LED Strobe Lights',
+      name: ' وامضة أضواء LED',
       type: 'lights',
       isOnline: true,
       isActive: false,
@@ -47,7 +47,7 @@ export const IoTDevicePanel = () => {
     },
     {
       id: 'sprinkler-001',
-      name: 'Water Sprinkler',
+      name: 'رشاش المياه',
       type: 'sprinkler',
       isOnline: false,
       isActive: false,
@@ -56,7 +56,7 @@ export const IoTDevicePanel = () => {
     },
     {
       id: 'siren-001',
-      name: 'Emergency Siren',
+      name: 'صافرة الطوارئ',
       type: 'siren',
       isOnline: true,
       isActive: false,
@@ -83,8 +83,8 @@ export const IoTDevicePanel = () => {
     
     const device = devices.find(d => d.id === deviceId);
     toast({
-      title: device?.isActive ? "Device Deactivated" : "Device Activated",
-      description: `${device?.name} is now ${device?.isActive ? 'off' : 'active'}`,
+      title: device?.isActive ? "تم إلغاء تفعيل الجهاز" : "تم تفعيل الجهاز",
+      description: `${device?.name} ${device?.isActive ? 'مطفأ' : 'نشط'} الآن`,
     });
   };
 
@@ -103,8 +103,8 @@ export const IoTDevicePanel = () => {
     })));
     
     toast({
-      title: "Emergency Protocol Activated",
-      description: "All deterrent devices have been activated",
+      title: "تم تفعيل بروتوكول الطوارئ",
+      description: "تم تفعيل جميع أجهزة الردع",
       variant: "destructive"
     });
   };
@@ -116,8 +116,8 @@ export const IoTDevicePanel = () => {
     })));
     
     toast({
-      title: "All Devices Deactivated",
-      description: "All deterrent devices have been turned off",
+      title: "تم إلغاء تفعيل جميع الأجهزة",
+      description: "تم إيقاف جميع أجهزة الردع",
     });
   };
 
@@ -126,7 +126,7 @@ export const IoTDevicePanel = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Zap className="h-5 w-5" />
-          IoT Deterrent Devices
+          أجهزة الردع الذكية
         </CardTitle>
         <div className="flex gap-2">
           <Button 
@@ -136,7 +136,7 @@ export const IoTDevicePanel = () => {
             className="flex items-center gap-2"
           >
             <Play className="h-4 w-4" />
-            Emergency Protocol
+            بروتوكول الطوارئ
           </Button>
           <Button 
             onClick={deactivateAllDevices}
@@ -145,7 +145,7 @@ export const IoTDevicePanel = () => {
             className="flex items-center gap-2"
           >
             <Square className="h-4 w-4" />
-            Stop All
+            إيقاف الكل
           </Button>
         </div>
       </CardHeader>
@@ -167,11 +167,11 @@ export const IoTDevicePanel = () => {
                         variant={device.isOnline ? 'default' : 'destructive'}
                         className="text-xs"
                       >
-                        {device.isOnline ? 'Online' : 'Offline'}
+                        {device.isOnline ? 'متصل' : 'غير متصل'}
                       </Badge>
                       {device.batteryLevel && (
                         <span className="text-xs text-muted-foreground">
-                          Battery: {device.batteryLevel}%
+                          البطارية: {device.batteryLevel}%
                         </span>
                       )}
                     </div>
@@ -186,7 +186,7 @@ export const IoTDevicePanel = () => {
               
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium">Intensity</label>
+                  <label className="text-sm font-medium">الشدة</label>
                   <span className="text-sm text-muted-foreground">{device.intensity}%</span>
                 </div>
                 <Slider
@@ -202,7 +202,7 @@ export const IoTDevicePanel = () => {
               {device.isActive && (
                 <div className="mt-3 p-2 bg-green-50 dark:bg-green-950 rounded-lg">
                   <p className="text-sm text-green-600 dark:text-green-400">
-                    ✓ Device is actively deterring animals
+                    ✓ الجهاز يردع الحيوانات بنشاط
                   </p>
                 </div>
               )}

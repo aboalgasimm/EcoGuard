@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -137,5 +139,299 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+
+  [dir="rtl"] .flex {
+    flex-direction: row-reverse;
+  }
+
+  /* RTL adjustments for specific components */
+  [dir="rtl"] .space-x-2 > * + * {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+
+  [dir="rtl"] .space-x-3 > * + * {
+    margin-left: 0;
+    margin-right: 0.75rem;
+  }
+
+  /* Header and title alignment for RTL */
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+    text-align: right;
+  }
+
+  [dir="rtl"] .text-center {
+    text-align: center !important;
+  }
+
+  /* Card headers should be right-aligned in RTL */
+  [dir="rtl"] .card-header {
+    text-align: right;
+  }
+
+  /* Flex containers in RTL */
+  [dir="rtl"] .justify-between {
+    justify-content: space-between;
+    flex-direction: row-reverse;
+  }
+
+  [dir="rtl"] .items-center {
+    align-items: center;
+  }
+
+  /* Tab navigation RTL support */
+  [dir="rtl"] .tabs-list {
+    flex-direction: row-reverse;
+  }
+
+  /* Navigation elements */
+  [dir="rtl"] nav {
+    text-align: right;
+  }
+
+  /* Force RTL alignment for main container */
+  [dir="rtl"] .container, [dir="rtl"] main {
+    text-align: right;
+  }
+
+  /* Header specifically */
+  [dir="rtl"] header {
+    text-align: right;
+    direction: rtl;
+  }
+
+  /* Main title and brand */
+  [dir="rtl"] .brand, [dir="rtl"] .logo {
+    text-align: right;
+    justify-content: flex-end;
+  }
+
+  /* Tabs and navigation alignment */
+  [dir="rtl"] .tabs-trigger {
+    text-align: right;
+  }
+
+  /* Override any left alignment */
+  [dir="rtl"] * {
+    text-align: inherit;
+  }
+
+  /* Specific fixes for the header area */
+  html[dir="rtl"] * {
+    direction: rtl;
+  }
+
+  html[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* Global RTL enforcement */
+  [dir="rtl"] * {
+    direction: rtl !important;
+  }
+
+  /* Flex containers should reverse in RTL */
+  [dir="rtl"] .flex {
+    flex-direction: row-reverse !important;
+  }
+
+  /* Specific container alignment */
+  [dir="rtl"] .container {
+    text-align: right;
+  }
+
+  /* Override Tailwind defaults for RTL */
+  [dir="rtl"] .justify-start {
+    justify-content: flex-end !important;
+  }
+
+  [dir="rtl"] .justify-end {
+    justify-content: flex-start !important;
+  }
+
+  /* Force text alignment for all Arabic content */
+  [dir="rtl"] .card-title,
+  [dir="rtl"] .card-content,
+  [dir="rtl"] .card-header {
+    text-align: right !important;
+  }
+
+  /* Badge and status indicators */
+  [dir="rtl"] .badge {
+    text-align: center;
+  }
+
+  /* Button content alignment */
+  [dir="rtl"] .btn-content {
+    justify-content: center;
+  }
+
+  /* Grid and layout fixes */
+  [dir="rtl"] .grid {
+    direction: rtl;
+  }
+
+  /* Ensure tabs are properly aligned */
+  [dir="rtl"] .tabs-content {
+    text-align: right;
+  }
+
+  /* Force all text elements to align right in RTL */
+  [dir="rtl"] p, 
+  [dir="rtl"] span, 
+  [dir="rtl"] div:not(.flex), 
+  [dir="rtl"] label {
+    text-align: right;
+  }
+
+  /* Status indicators and badges */
+  [dir="rtl"] .status-indicator {
+    justify-content: flex-end;
+  }
+
+  /* Camera grid specific */
+  [dir="rtl"] .camera-card {
+    text-align: right;
+  }
+
+  /* Alert panels and cards */
+  [dir="rtl"] .alert-content {
+    text-align: right;
+  }
+
+  /* Force button content alignment */
+  [dir="rtl"] button {
+    justify-content: center;
+  }
+
+  /* Make sure icons are positioned correctly */
+  [dir="rtl"] .icon-text {
+    flex-direction: row-reverse;
+  }
+
+  /* Global text direction override */
+  html[dir="rtl"] {
+    text-align: right !important;
+  }
+
+  /* Force all containers to respect RTL */
+  [dir="rtl"] .container,
+  [dir="rtl"] .card,
+  [dir="rtl"] .tabs-content,
+  [dir="rtl"] .tab-panel {
+    direction: rtl !important;
+    text-align: right !important;
+  }
+
+  /* Specific overrides for flex items */
+  [dir="rtl"] .flex-item {
+    justify-content: flex-end;
+  }
+
+  /* Status banner specific fixes */
+  [dir="rtl"] .status-banner {
+    text-align: right;
+  }
+
+  [dir="rtl"] .status-banner h2,
+  [dir="rtl"] .status-banner p {
+    text-align: right !important;
+  }
+
+  /* Override flex justify for status components */
+  [dir="rtl"] .justify-between {
+    justify-content: flex-end !important;
+  }
+
+  /* Fix card content alignment */
+  [dir="rtl"] .card h3,
+  [dir="rtl"] .card h4,
+  [dir="rtl"] .card p {
+    text-align: right !important;
+  }
+
+  /* Alert panel fixes */
+  [dir="rtl"] .alert-panel h4,
+  [dir="rtl"] .alert-panel p {
+    text-align: right !important;
+  }
+
+  /* Statistics and numbers alignment */
+  [dir="rtl"] .stats-number {
+    text-align: center !important;
+  }
+
+  [dir="rtl"] .stats-label {
+    text-align: right !important;
+  }
+
+  /* Universal RTL override - most important rules */
+  [dir="rtl"] .flex.justify-between {
+    justify-content: flex-end !important;
+    flex-direction: row-reverse !important;
+  }
+
+  [dir="rtl"] .flex.items-center {
+    flex-direction: row-reverse !important;
+  }
+
+  /* Text content alignment */
+  [dir="rtl"] .text-content h1,
+  [dir="rtl"] .text-content h2,
+  [dir="rtl"] .text-content h3,
+  [dir="rtl"] .text-content h4,
+  [dir="rtl"] .text-content h5,
+  [dir="rtl"] .text-content h6,
+  [dir="rtl"] .text-content p,
+  [dir="rtl"] .text-content span {
+    text-align: right !important;
+  }
+
+  /* Override for all card headers and content */
+  [dir="rtl"] [class*="card"] h1,
+  [dir="rtl"] [class*="card"] h2,
+  [dir="rtl"] [class*="card"] h3,
+  [dir="rtl"] [class*="card"] h4,
+  [dir="rtl"] [class*="card"] h5,
+  [dir="rtl"] [class*="card"] h6,
+  [dir="rtl"] [class*="card"] p {
+    text-align: right !important;
+  }
+
+  /* Force all flex containers to be RTL */
+  [dir="rtl"] .flex:not(.justify-center) {
+    flex-direction: row-reverse !important;
+  }
+
+  /* Specific fix for status banner to match header */
+  [dir="rtl"] .bg-gradient-earth {
+    direction: rtl !important;
+    text-align: right !important;
+  }
+
+  [dir="rtl"] .bg-gradient-earth h2,
+  [dir="rtl"] .bg-gradient-earth p {
+    text-align: right !important;
+    direction: rtl !important;
+  }
+
+  /* Ensure all main content sections are RTL */
+  [dir="rtl"] main > div {
+    direction: rtl !important;
+    text-align: right !important;
+  }
+
+  /* Force gradient backgrounds to be RTL */
+  [dir="rtl"] [class*="gradient"] {
+    direction: rtl !important;
+    text-align: right !important;
   }
 }
